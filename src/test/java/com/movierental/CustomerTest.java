@@ -55,6 +55,33 @@ public class CustomerTest {
         assertEquals(expectedResult, result);
     }
 
+    @Test
+    public void frequentPointsHasCorrectValue() {
+        String testCustomer = "testCustomer";
+        Customer customer = new Customer(testCustomer);
+
+        String testMovieName1 = "testMovie1";
+        Movie testMovie1 = new Movie(testMovieName1, 0);
+        Rental rental1 = new Rental(testMovie1, 5);
+        customer.addRental(rental1);
+
+        String testMovieName2 = "testMovie2";
+        Movie testMovie2 = new Movie(testMovieName2, 1);
+        Rental rental2 = new Rental(testMovie2, 2);
+        customer.addRental(rental2);
+
+        String testMovieName3 = "testMovie3";
+        Movie testMovie3 = new Movie(testMovieName3, 2);
+        Rental rental3 = new Rental(testMovie3, 3);
+        customer.addRental(rental3);
+
+        int frequenterRentalPointsForCustomer = customer.getAllFrequenterRentalPoints();
+
+        int frequentPoints = 4;
+
+        assertEquals(frequentPoints, frequenterRentalPointsForCustomer);
+    }
+
     private double getRentalAmount(int rentalCode, int daysRented){
         double thisAmount = 0;
 

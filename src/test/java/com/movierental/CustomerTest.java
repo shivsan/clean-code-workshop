@@ -56,33 +56,77 @@ public class CustomerTest {
     }
 
 
-//
-//    @Test
-//    public void frequentPointsHasCorrectValue() {
-//        String testCustomer = "testCustomer";
-//        Customer customer = new Customer(testCustomer);
-//
-//        String testMovieName1 = "testMovie1";
-//        Movie testMovie1 = new Movie(testMovieName1, 0);
-//        Rental rental1 = new Rental(testMovie1, 5);
-//        customer.addRental(rental1);
-//
-//        String testMovieName2 = "testMovie2";
-//        Movie testMovie2 = new Movie(testMovieName2, 1);
-//        Rental rental2 = new Rental(testMovie2, 2);
-//        customer.addRental(rental2);
-//
-//        String testMovieName3 = "testMovie3";
-//        Movie testMovie3 = new Movie(testMovieName3, 2);
-//        Rental rental3 = new Rental(testMovie3, 3);
-//        customer.addRental(rental3);
-//
-//        int frequenterRentalPointsForCustomer = customer.getAllFrequentRentalPoints();
-//
-//        int frequentPoints = 4;
-//
-//        assertEquals(frequentPoints, frequenterRentalPointsForCustomer);
-//    }
+    @Test
+    public void htmlStatementHasCorrectBreakup() {
+        String testCustomer = "testCustomer";
+        Customer customer = new Customer(testCustomer);
+
+        String testMovieName1 = "testMovie1";
+        Movie testMovie1 = new Movie(testMovieName1, 0);
+        Rental rental1 = new Rental(testMovie1, 5);
+        customer.addRental(rental1);
+
+        String testMovieName2 = "testMovie2";
+        Movie testMovie2 = new Movie(testMovieName2, 1);
+        Rental rental2 = new Rental(testMovie2, 2);
+        customer.addRental(rental2);
+
+        String testMovieName3 = "testMovie3";
+        Movie testMovie3 = new Movie(testMovieName3, 2);
+        Rental rental3 = new Rental(testMovie3, 3);
+        customer.addRental(rental3);
+
+        String result = customer.htmlStatement();
+
+        String expectedResult = "Rental Record for <b>" + testCustomer + "</b><br>";
+        expectedResult += "\t" + testMovie1.getTitle() + "\t" +
+                String.valueOf(getRentalAmount(testMovie1.getPriceCode(), rental1.getDaysRented())) + "<br>";
+
+        expectedResult += "\t" + testMovie2.getTitle() + "\t" +
+                String.valueOf(getRentalAmount(testMovie2.getPriceCode(), rental2.getDaysRented())) + "<br>";
+
+        expectedResult += "\t" + testMovie3.getTitle() + "\t" +
+                String.valueOf(getRentalAmount(testMovie3.getPriceCode(), rental3.getDaysRented())) + "<br>";
+
+        double totalAmount = getRentalAmount(testMovie1.getPriceCode(), rental1.getDaysRented()) +
+                getRentalAmount(testMovie2.getPriceCode(), rental2.getDaysRented()) +
+                getRentalAmount(testMovie3.getPriceCode(), rental3.getDaysRented());
+
+        int frequentRenterPoints = 4;
+
+        expectedResult += "Amount owed is <b>" + totalAmount + "</b><br>";
+        expectedResult += "You earned <b>" + String.valueOf(frequentRenterPoints)
+                + "</b> frequent renter points";
+
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void frequentPointsHasCorrectValue() {
+        String testCustomer = "testCustomer";
+        Customer customer = new Customer(testCustomer);
+
+        String testMovieName1 = "testMovie1";
+        Movie testMovie1 = new Movie(testMovieName1, 0);
+        Rental rental1 = new Rental(testMovie1, 5);
+        customer.addRental(rental1);
+
+        String testMovieName2 = "testMovie2";
+        Movie testMovie2 = new Movie(testMovieName2, 1);
+        Rental rental2 = new Rental(testMovie2, 2);
+        customer.addRental(rental2);
+
+        String testMovieName3 = "testMovie3";
+        Movie testMovie3 = new Movie(testMovieName3, 2);
+        Rental rental3 = new Rental(testMovie3, 3);
+        customer.addRental(rental3);
+
+        int frequenterRentalPointsForCustomer = customer.getAllFrequentRentalPoints();
+
+        int frequentPoints = 4;
+
+        assertEquals(frequentPoints, frequenterRentalPointsForCustomer);
+    }
 
     private double getRentalAmount(int rentalCode, int daysRented){
         double thisAmount = 0;

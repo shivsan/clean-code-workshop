@@ -40,8 +40,20 @@ public class Customer {
         return rentals.stream().mapToInt(r -> r.getFrequentRenterPoints()).sum();
     }
 
+    private double getTotalAmount() {
+        return rentals.stream().mapToDouble(r -> r.getAmount()).sum();
+    }
+
     public String htmlStatement() {
-        String result = "Rental Record for <b>" + getName() + "</b><br>";
+        return new TextFormatter().htmlStatement(getName(), rentals, getTotalAmount(), getAllFrequentRentalPoints());
+    }
+}
+
+
+class TextFormatter{
+
+    public String htmlStatement(String customerName, List<Rental> rentals, double totalAmount, int allFrequentRentalPoints) {
+        String result = "Rental Record for <b>" + customerName + "</b><br>";
         for (Rental each : rentals) {
             double thisAmount = each.getAmount();
 
@@ -51,15 +63,9 @@ public class Customer {
         }
 
         //add footer lines result
-        result += "Amount owed is <b>" + String.valueOf(getTotalAmount()) + "</b><br>";
-        result += "You earned <b>" + getAllFrequentRentalPoints()
+        result += "Amount owed is <b>" + String.valueOf(totalAmount) + "</b><br>";
+        result += "You earned <b>" + allFrequentRentalPoints
                 + "</b> frequent renter points";
         return result;
     }
-
-
-    private double getTotalAmount() {
-        return rentals.stream().mapToDouble(r -> r.getAmount()).sum();
-    }
 }
-

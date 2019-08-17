@@ -19,42 +19,35 @@ public class Customer {
         return name;
     }
 
+
     public String statement() {
-        String result = "Rental Record for " + getName() + "\n";
-        for (Rental each : rentals) {
-            double thisAmount = each.getAmount();
+        RentalDetails rentalDetails = new RentalDetails();
+        rentalDetails.addAll(rentals);
+        return new TextFormatter().statement(getName(), rentalDetails);
+    }
 
-            //show figures for this rental
-            result += "\t" + each.getMovie().getTitle() + "\t" +
-                    String.valueOf(thisAmount) + "\n";
-        }
 
-        //add footer lines result
-        result += "Amount owed is " + String.valueOf(getTotalAmount()) + "\n";
-        result += "You earned " + getAllFrequentRentalPoints()
-                + " frequent renter points";
-        return result;
+    private double getTotalAmount() {
+        return rentals.stream().mapToDouble(r -> r.getAmount()).sum();
     }
 
     public int getAllFrequentRentalPoints() {
         return rentals.stream().mapToInt(r -> r.getFrequentRenterPoints()).sum();
     }
 
-    private double getTotalAmount() {
-        return rentals.stream().mapToDouble(r -> r.getAmount()).sum();
-    }
-
     public String htmlStatement() {
-        return new TextFormatter().htmlStatement(getName(), rentals, getTotalAmount(), getAllFrequentRentalPoints());
+        RentalDetails rentalDetails = new RentalDetails();
+        rentalDetails.addAll(rentals);
+        return new HtmlTextFormatter().htmlStatement(getName(), rentalDetails);
     }
 }
 
 
-class TextFormatter{
+class HtmlTextFormatter {
 
-    public String htmlStatement(String customerName, List<Rental> rentals, double totalAmount, int allFrequentRentalPoints) {
+    public String htmlStatement(String customerName, RentalDetails rentalDetails) {
         String result = "Rental Record for <b>" + customerName + "</b><br>";
-        for (Rental each : rentals) {
+        for (Rental each : rentalDetails) {
             double thisAmount = each.getAmount();
 
             //show figures for this rental
@@ -63,9 +56,29 @@ class TextFormatter{
         }
 
         //add footer lines result
-        result += "Amount owed is <b>" + String.valueOf(totalAmount) + "</b><br>";
-        result += "You earned <b>" + allFrequentRentalPoints
+        result += "Amount owed is <b>" + String.valueOf(rentalDetails.getTotalAmount()) + "</b><br>";
+        result += "You earned <b>" + rentalDetails.getAllFrequentRentalPoints()
                 + "</b> frequent renter points";
+        return result;
+    }
+}
+
+class TextFormatter {
+
+    public String statement(String customerName, RentalDetails rentalDetails) {
+        String result = "Rental Record for " + customerName + "\n";
+        for (Rental each : rentalDetails) {
+            double thisAmount = each.getAmount();
+
+            //show figures for this rental
+            result += "\t" + each.getMovie().getTitle() + "\t" +
+                    String.valueOf(thisAmount) + "\n";
+        }
+
+        //add footer lines result
+        result += "Amount owed is " + String.valueOf(rentalDetails.getTotalAmount()) + "\n";
+        result += "You earned " + rentalDetails.getAllFrequentRentalPoints()
+                + " frequent renter points";
         return result;
     }
 }
